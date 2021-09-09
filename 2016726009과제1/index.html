@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graph drawing tool</title>
+  <style>
+    body{
+      background: #dddddd
+    }
+
+    #canvas{
+      margin: 10px;
+      padding: 10px;
+      background: white;
+      border: thin inset black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id='canvas' width='1200' height='800'>
+    Canvas not supported
+  </canvas>
+  <script>
+
+  var context = document.getElementById('canvas').getContext('2d');
+  var c1Bar=0;
+  var c2Bar=0;
+  var c3Bar=0;
+  var c4Bar=0;
+
+  document.addEventListener('keydown', (event) => {
+    const keyValue = event.key;
+    if(keyValue == 'q'){
+      context.lineWidth = 2;
+      context.strokeStyle = 'aqua';
+      if(c1Bar < 68){
+        drawRect(230,canvas.height-70-(10*c1Bar),30,10);
+        context.stroke();
+        c1Bar++;
+      }
+    }
+    if(keyValue == 'w'){
+      context.lineWidth = 2;
+      context.strokeStyle = 'chartreuse';
+      if(c2Bar < 68){
+        drawRect(480,canvas.height-70-(10*c2Bar),30,10);
+        context.stroke();
+        c2Bar++;
+      }
+    }
+    if(keyValue == 'e'){
+      context.lineWidth = 2;
+      context.strokeStyle = 'darkkhaki';
+      if(c3Bar < 68){
+        drawRect(730,canvas.height-70-(10*c3Bar),30,10);
+        context.stroke();
+        c3Bar++;
+      }
+    }
+    if(keyValue == 'r'){
+      context.lineWidth = 2;
+      context.strokeStyle = 'darkviolet';
+      if(c4Bar < 68){
+        drawRect(980,canvas.height-70-(10*c4Bar),30,10);
+        context.stroke();
+        c4Bar++;
+      }
+    }
+    if(keyValue == 'b'){
+      context.lineWidth = 2;
+      context.strokeStyle = 'teal';
+      context.beginPath();
+      context.moveTo(245,canvas.height-70-(10*(c1Bar-1)));
+      context.bezierCurveTo(495,canvas.height-70-(10*(c2Bar-1)),745,
+                            canvas.height-70-(10*(c3Bar-1)),995,canvas.height-70-(10*(c4Bar-1)));
+      context.stroke();
+      context.strokeStyle = 'black';
+    }
+
+  }, false);
+
+//30.5 = margin of grid
+  function drawGrid(context, color, stepx, stepy){
+    context.strokeStyle = color;
+    context.lineWidth = 0.5;
+
+    for(var i=stepx+50.5; i<context.canvas.width-50.5; i+= stepx){
+      context.beginPath();
+      context.moveTo(i,60.5);
+      context.lineTo(i, context.canvas.height-60.5);
+      context.stroke();
+    }
+
+    for(var i=stepy+50.5; i<context.canvas.height-50.5; i+=stepy){
+      context.beginPath();
+      context.moveTo(60.5,i);
+      context.lineTo(context.canvas.width-60.5,i);
+      context.stroke();
+    }
+  }
+  //u must call stroke or fill after this function called
+  function drawRect(xpos, ypos, width, height){
+    context.beginPath();
+    context.rect(xpos,ypos,width,height);
+  }
+
+  var leftImage = new Image();
+  leftImage.src = 'resource/left.jpeg';
+  leftImage.onload = function(e){
+    context.drawImage(leftImage,0,0,50.5,canvas.height);
+  }
+  var rightImage = new Image();
+  rightImage.src = 'resource/right.jpeg';
+  rightImage.onload = function(e){
+    context.drawImage(rightImage,canvas.width-50.5,0,50.5,canvas.height);
+  }
+
+  function drawText(text, xpos, ypos,font){
+    context.font = font;
+    context.fillText(text,xpos,ypos);
+    context.strokeText(text,xpos,ypos);
+    context.font = '10px century';
+  }
+
+  function drawHeadline(){
+    drawText('Graph drawing Tool', 360,40,'50px century');
+  }
+
+  function drawHeadLineCircle(){
+    context.fillStyle = 'darkcyan';
+    context.beginPath();
+    context.arc(325,25,23,0,Math.PI*2);
+    context.fill();
+    context.fillStyle = 'black';
+  }
+
+  function drawPolygon(posx, posy, rad, sides,color) {
+    var angleDiv = 2*Math.PI/sides;
+    var angle = 0;
+
+    context.beginPath();
+    context.moveTo(posx, posy - rad);
+    for(var i=0; i<=sides; i++) {
+      context.lineTo(posx + rad*Math.cos(angleDiv*i + Math.PI/2),
+                     posy - rad*Math.sin(angleDiv*i + Math.PI/2));
+    }
+    context.fillStyle = color;
+    context.fill();
+    context.fillStyle = 'black';
+  }
+
+  //function called part
+  drawGrid(context, 'lightgrey', 10,10);
+  drawRect(60.5, 60.5, canvas.width-120, canvas.height-120);
+  context.strokeStyle = 'black';
+  context.stroke();
+  drawHeadline();
+  drawHeadLineCircle();
+  drawPolygon(180,canvas.height - 30,10,6,'aqua');
+  drawText('Press Q', 200, canvas.height - 20,'30px century');
+  drawPolygon(430,canvas.height - 30,10,6,'chartreuse');
+  drawText('Press W', 450, canvas.height - 20,'30px century');
+  drawPolygon(680,canvas.height - 30,10,6,'darkkhaki');
+  drawText('Press E', 700, canvas.height - 20,'30px century');
+  drawPolygon(930,canvas.height - 30,10,6,'darkviolet');
+  drawText('Press R', 950, canvas.height - 20,'30px century');
+  drawPolygon(885,94,8,6,'teal');
+  drawText('Press B to draw bezier', 900, 100,'18px century');
+  </script>
+</body>
+</html>
