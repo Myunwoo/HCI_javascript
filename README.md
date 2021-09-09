@@ -1,5 +1,5 @@
 # HCI_javascript
-Human computer interface practice(javascript)
+**Human computer interface practice(javascript)  **
 휴먼컴퓨터 인터페이스 과제 보관
 
 과제1: 키보드 이벤트에 따른 화면 동작 연습  
